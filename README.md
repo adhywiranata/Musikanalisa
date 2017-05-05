@@ -1,8 +1,12 @@
 # Musikanalisa
 
-__Musik. Kanal. Analisa__
+## Musik. Kanal. Analisa
 
 Data visualization of top artists, musics, and albums from Spotify. Developed using React, Redux, and D3.
+
+#### __Top New Releases__ 🎉
+analytics about new releases which earned high popularity
+  - [API - GET New Releases](https://developer.spotify.com/web-api/get-list-new-releases/) *WIP*
 
 #### __My Recent Tracks__ 🔉
 
@@ -13,7 +17,7 @@ analytics about user's recent played tracks.
 analytics about user's top artists and Tracks.
   - [API - GET top artists and tracks](https://developer.spotify.com/web-api/get-users-top-artists-and-tracks/) *WIP*
 
-#### __My Followed Artists__ 🎵
+#### __My Followed Artists__ 👱
 analytics about user's top artists and Tracks.
   - [API - GET following](https://developer.spotify.com/web-api/get-followed-artists/) *WIP*
 
