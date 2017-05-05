@@ -13,6 +13,10 @@ analytics about user's recent played tracks.
 analytics about user's top artists and Tracks.
   - [API - GET top artists and tracks](https://developer.spotify.com/web-api/get-users-top-artists-and-tracks/) *WIP*
 
+#### __My Followed Artists__ 🎵
+analytics about user's top artists and Tracks.
+  - [API - GET following](https://developer.spotify.com/web-api/get-followed-artists/) *WIP*
+
 #### __My Saved Tracks Management__ 📊
 management of user's saved track. Don't let musics you don't like kept in your saved tracks!
   - [API - GET saved tracks](https://developer.spotify.com/web-api/get-users-saved-tracks/) *WIP*
