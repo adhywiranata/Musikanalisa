@@ -22,7 +22,7 @@ app.get('/login', function(req, res) {
  res.cookie(stateKey, state);
 
  // your application requests authorization
- var scope = 'user-read-private user-read-email user-follow-read';
+ var scope = 'user-read-private user-read-email user-follow-read user-read-recently-played';
  res.redirect('https://accounts.spotify.com/authorize?' +
    querystring.stringify({
      response_type: 'code',
@@ -78,7 +78,7 @@ app.get('/callback', function(req, res) {
         request.get(options, function(error, response, body) {
           console.log(body);
         });
-        
+
         // we can also pass the token to the browser to make requests from there
         res.redirect('http://localhost:3000/callback/' + access_token + '/' + refresh_token);
       } else {

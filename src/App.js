@@ -7,6 +7,7 @@ import './App.css';
 import Login from './containers/Login';
 import AuthSuccess from './containers/AuthSuccess';
 import MyArtists from './containers/MyArtists';
+import Profile from './containers/Profile';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
           </div>
           <Route exact path="/" component={MyArtists} />
           <Route path="/login" component={Login} />
+          <Route path="/me" component={Profile} />
           <Route path="/callback/:access_token/:refresh_token" component={AuthSuccess} />
         </div>
       </BrowserRouter>
