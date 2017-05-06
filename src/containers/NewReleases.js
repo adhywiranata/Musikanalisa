@@ -17,7 +17,7 @@ const styles = {
     fontSize: '2em',
   },
   svgWrapper: {
-    height: 900,
+    height: 600,
     width: '80%',
   },
   btn: {
@@ -49,7 +49,85 @@ class NewReleases extends React.Component {
   }
 
   renderSvg() {
-    
+    const { newReleases } = this.state;
+    const dataset = newReleases.map(release => ({
+      id: release.id,
+      name: release.name,
+      popularity: release.popularity,
+      image: release.images[0].url,
+    }));
+    console.log(dataset);
+
+    const svg = d3.select('#svgWrapper')
+      .append('svg')
+        .attr('class', 'newReleasesSvg')
+        .style('width', '100%')
+        .style('height', '100%')
+        .style('background-color', '#353535')
+        .style('border', '1px solid rgba(255, 255, 255, 0.3)')
+        .style('box-sizing', 'border-box')
+        .style('padding', 50);
+
+    // we'll show 20 bar charts
+    const svgWidth = 1000;
+    const svgHeight = 500;
+    const barPadding = 40;
+    const customElasticEasing = d3.easeElastic.period(0.3);
+    const popularities = dataset.map(item => item.popularity);
+
+    const yScale = d3.scaleLinear()
+      .domain([0, d3.max(popularities)])
+      .range([svgHeight, 0]);
+
+    const barGroup = svg.selectAll('g').data(dataset).enter().append('g');
+
+    barGroup.append('rect')
+        .attr('fill', 'none')
+        .attr('stroke', 'rgba(255, 255, 255, 0.3)')
+        .attr('stroke-width', 1)
+        .attr('width', (d, i) => svgWidth / 20 - barPadding)
+        .attr('x', (d, i) => (svgWidth / 20) * i + barPadding)
+        .attr('height', d => svgHeight )
+        .attr('y', 0);
+
+    barGroup.append('rect')
+        .attr('fill', '#1ED760')
+        .attr('width', (d, i) => svgWidth / 20 - barPadding)
+        .attr('x', (d, i) => (svgWidth / 20) * i + barPadding)
+        .attr('height', 0)
+        .attr('y', svgHeight)
+      .transition()
+        .duration(1000)
+        .ease(customElasticEasing)
+        .delay((d, i) => i * 100)
+        .attr('height', (d) => svgHeight - yScale(d.popularity) )
+        .attr('y', (d, i) => yScale(d.popularity));
+
+    barGroup.append('text')
+      .attr('fill', '#FFFFFF')
+      .text(d => d.name)
+      .attr('x', 0)
+      .attr('y', (d, i) => (svgWidth / 20) * i * -1 - barPadding)
+      .attr('transform', 'rotate(90) translate(0, -20)');
+
+    const yAxis = d3.axisLeft(yScale).ticks(d3.max(popularities) / 5);
+
+    svg.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis);
+
+    d3.select('.y.axis').select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.8)')
+    const axisTicks = d3.select('.y.axis').selectAll('.tick');
+    axisTicks.select('line').attr('stroke', 'rgba(255, 255, 255, 0.5)');
+    axisTicks.select('text').attr('fill', '#FFFFFF').style('font-size', 16);
+
+    svg.append('text')
+      .attr('x', -40)
+      .attr('y', -20)
+      .text('POPULARITY')
+      .attr('fill', 'rgba(255,255,255, 0.8)')
+      .style('font-size', 20)
+      .style('font-weight', 700);
   }
 
   fetchSuccess(albums) {
@@ -76,7 +154,6 @@ class NewReleases extends React.Component {
       }
     }).then(res => {
       const albumsIds = res.data.albums.items.map(item => item.id).join(',');
-      console.log(albumsIds);
       axios({
         method: 'GET',
         url: `https://api.spotify.com/v1/albums?ids=${albumsIds}`,
