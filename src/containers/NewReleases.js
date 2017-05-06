@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import * as d3 from 'd3';
 
+import AlbumList from '../components/AlbumList';
+
 const styles = {
   container: {
     padding: 0,
@@ -72,7 +74,7 @@ class NewReleases extends React.Component {
       newReleases: albums.map(album => ({
         id: album.id,
         name: album.name,
-        image: album.images[0].url,
+        images: album.images,
         popularity: album.popularity,
         release_date: album.release_date,
         artists: album.artists,
@@ -127,7 +129,7 @@ class NewReleases extends React.Component {
             </button>
           </Link>
         ) }
-        <h4 style={{ color: 'white' }}>{ JSON.stringify(newReleases) }</h4>
+        <AlbumList items={newReleases} />
         </div>
       </div>
     );
