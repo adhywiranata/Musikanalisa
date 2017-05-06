@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import logo from './logo.svg';
 import './App.css';
 
 import Login from './containers/Login';
 import AuthSuccess from './containers/AuthSuccess';
 import MyArtists from './containers/MyArtists';
 import Profile from './containers/Profile';
+import { Header } from './components';
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-          <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h2>MusiKanalisa</h2>
-          </div>
+          <Header />
           <Route exact path="/" component={MyArtists} />
           <Route path="/login" component={Login} />
           <Route path="/me" component={Profile} />

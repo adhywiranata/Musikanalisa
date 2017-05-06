@@ -33,12 +33,12 @@ class Login extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <h2>Login to Musikanalisa</h2>
-          <a href="http://localhost:1234/login/">
-            <button style={styles.btn}>
-              Login via Spotify
-            </button>
-          </a>
+        <h2 style={{ color: '#FFFFFF', fontSize: '2em' }}>Login to Musikanalisa</h2>
+        <a href="http://localhost:1234/login/">
+          <button style={styles.btn}>
+            Login via Spotify
+          </button>
+        </a>
       </div>
     );
   }

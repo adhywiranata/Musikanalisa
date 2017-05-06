@@ -2,22 +2,24 @@ import React from 'react';
 import axios from 'axios';
 
 const styles = {
+  container: {
+    padding: '0 100px',
+  },
   list: {
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     padding: 40,
     boxSizing: 'border-box',
   },
   card: {
     width: '20%',
-    margin: '10px 0',
-    padding: 20,
+    margin: '20px 10px',
+    padding: 0,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    border: '1px solid rgba(0,0,0, .1)',
+    borderRadius: 5,
   },
 }
 
@@ -36,15 +38,14 @@ class MyArtists extends React.Component {
   }
 
   render() {
-    console.log(this.state.albums);
     return (
       <div style={styles.container}>
-        <h2>{`${this.state.artist}\'s Albums`}</h2>
+        <h2 style={{ color: '#FFFFFF', fontSize: '2em' }}>{`${this.state.artist}\'s Albums`}</h2>
         <div style={styles.list}>
           {this.state.albums.map(album => (
             <div key={album.id} style={styles.card}>
-              <h3>{ album.name }</h3>
               <img src={ album.images[0].url} width="100%" />
+              <h4>{ album.name }</h4>
             </div>
           ))}
         </div>
