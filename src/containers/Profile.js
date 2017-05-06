@@ -15,7 +15,7 @@ const styles = {
     fontSize: '2em',
   },
   svgWrapper: {
-    height: 500,
+    height: 900,
     width: '80%',
   },
   list: {
@@ -72,11 +72,17 @@ class Profile extends React.Component {
     }));
     console.log(dataset);
 
-    const circleBaseRadius = 50;
-    const circleOuterRadius = 60;
-    const circleInnerRadius = 45;
-    const circleMargin = 10;
+    const circleBaseRadius = 80;
+    const circleOuterRadius = 90;
+    const circleInnerRadius = 70;
+    const circleMargin = 30;
     const customElasticEasing = d3.easeElastic.period(0.6);
+
+    // items are indexed from 0 to X. each time we got 5 items in a row,
+    // reset the x position to 0
+    const circleIndexXPosition = index => index % 5
+    // modify the y by adding them
+    const circleIndexYPosition = index => Math.floor(index / 5) + 1
 
     const svg = d3.select('#svgWrapper')
       .append('svg')
@@ -92,27 +98,27 @@ class Profile extends React.Component {
       .data(dataset)
       .enter()
         .append('g')
-        .attr('id', (d, i) => `circle-group-${i}`);
+        .attr('id', (d, i) => `circle-group-${i}`)
+        .attr('transform', 'translate(80, -150)');
 
     circleGroups.append('circle')
       .attr('r', 0)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
-      .attr('cy', (d, i) => circleOuterRadius * 1)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
       .attr('stroke', '#2ecc71')
       .attr('stroke-width', 2)
       .attr('fill', 'none')
-      .attr('visibility', 'hidden')
+      .style('opacity', 0.5)
       .transition()
         .duration(1500)
         .delay((d, i) => i * 110)
         .ease(customElasticEasing)
-        .attr('r', circleOuterRadius)
-        .attr('visibility', 'visible');
+        .attr('r', circleOuterRadius);
 
     circleGroups.append('circle')
       .attr('r', 0)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
-      .attr('cy', (d, i) => (circleOuterRadius * 1) + 50)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => ((circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i)) + 50)
       .attr('fill', '#2ecc71')
       .attr('visibility', 'hidden')
       .transition()
@@ -120,7 +126,7 @@ class Profile extends React.Component {
         .delay((d, i) => i * 100)
         .ease(customElasticEasing)
         .attr('r', circleBaseRadius)
-        .attr('cy', (d, i) => circleOuterRadius * 1)
+        .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
 
     const cgDefs = circleGroups.append('defs');
@@ -128,8 +134,8 @@ class Profile extends React.Component {
     const cgDefsPatterns = cgDefs.append('pattern')
       .attr('id', (d, i) => `cg-image-${i}`)
       .attr('patternUnits', 'objectBoundingBox')
-      .attr('width', 20)
-      .attr('height', 20);
+      .attr('width', 10)
+      .attr('height', 10);
 
     const cfDegsPatternsImages = cgDefsPatterns.append('image')
       .attr('x', 0)
@@ -140,15 +146,15 @@ class Profile extends React.Component {
 
     circleGroups.append('circle')
       .attr('r', circleInnerRadius)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
-      .attr('cy', (d, i) => (circleOuterRadius * 1) + 50)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => ((circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i)) + 50)
       .attr('fill', (d, i) => `url(#cg-image-${i})`)
       .attr('visibility', 'hidden')
       .transition()
         .duration(1000)
         .delay((d, i) => i * 100)
         .ease(customElasticEasing)
-        .attr('cy', (d, i) => circleOuterRadius * 1)
+        .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
   }
 
