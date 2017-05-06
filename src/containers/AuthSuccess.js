@@ -40,7 +40,7 @@ class AuthSuccess extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <h2>Auth Success!</h2>
+        <h2 style={{ color: '#FFFFFF' }}>Login Success!</h2>
         <Link to="/">
           <button style={styles.btn}>
             Continue
