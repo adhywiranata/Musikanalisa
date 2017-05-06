@@ -20,23 +20,6 @@ const styles = {
     height: 900,
     width: '80%',
   },
-  list: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    padding: 100,
-    boxSizing: 'border-box',
-  },
-  card: {
-    width: '20%',
-    margin: '20px 10px',
-    padding: 0,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    paddingBottom: 20,
-  },
   btn: {
     backgroundColor: '#1ED760',
     padding: 20,

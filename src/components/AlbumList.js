@@ -32,6 +32,8 @@ const AlbumList = ({items}) => (
         </div>
       </div>
       <div>
+        <p style={{ fontSize: '0.8em', color: '#333' }}>Released on: { item.release_date }</p>
+        <p style={{ fontSize: '0.8em', color: '#333' }}>Popularity: { item.popularity }</p>
         <span style={{ fontSize: '0.8em', color: '#666' }}>Artists</span>
         <ul style={{ padding: 0 }}>
         { item.artists.map(artist => (
