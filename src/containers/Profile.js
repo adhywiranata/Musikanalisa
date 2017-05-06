@@ -75,7 +75,7 @@ class Profile extends React.Component {
     const circleBaseRadius = 80;
     const circleOuterRadius = 90;
     const circleInnerRadius = 70;
-    const circleMargin = 30;
+    const circleMargin = 35;
     const customElasticEasing = d3.easeElastic.period(0.6);
 
     // items are indexed from 0 to X. each time we got 5 items in a row,
@@ -101,7 +101,24 @@ class Profile extends React.Component {
         .attr('id', (d, i) => `circle-group-${i}`)
         .attr('transform', 'translate(80, -150)');
 
+    const cgDefs = circleGroups.append('defs');
+
+    const cgDefsPatterns = cgDefs.append('pattern')
+      .attr('id', (d, i) => `cg-image-${i}`)
+      .attr('patternUnits', 'objectBoundingBox')
+      .attr('width', 10)
+      .attr('height', 10);
+
+    cgDefsPatterns.append('image')
+      .attr('id', (d, i) => `cg-image-inner-${i}`)
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', circleInnerRadius * 2)
+      .attr('height', circleInnerRadius * 2)
+      .attr('xlink:href', (d) => d.image);
+
     circleGroups.append('circle')
+      .attr('id', (d, i) => `circle-outer-${i}`)
       .attr('r', 0)
       .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
       .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
@@ -129,22 +146,8 @@ class Profile extends React.Component {
         .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
 
-    const cgDefs = circleGroups.append('defs');
-
-    const cgDefsPatterns = cgDefs.append('pattern')
-      .attr('id', (d, i) => `cg-image-${i}`)
-      .attr('patternUnits', 'objectBoundingBox')
-      .attr('width', 10)
-      .attr('height', 10);
-
-    const cfDegsPatternsImages = cgDefsPatterns.append('image')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', circleInnerRadius * 2)
-      .attr('height', circleInnerRadius * 2)
-      .attr('xlink:href', (d) => d.image);
-
     circleGroups.append('circle')
+      .attr('id', (d, i) => `circle-inner-${i}`)
       .attr('r', circleInnerRadius)
       .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
       .attr('cy', (d, i) => ((circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i)) + 50)
@@ -156,6 +159,55 @@ class Profile extends React.Component {
         .ease(customElasticEasing)
         .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
+
+    const circleTooltipGroups = circleGroups.append('g')
+      .attr('id', (d, i) => `ctg-${i}`)
+      .attr('visibility', 'hidden');
+
+    // circleTooltipGroups.append('rect')
+    //   .transition()
+    //   .duration(1000)
+    //   .delay(3000)
+    //   .attr('width', circleOuterRadius * 4)
+    //   .attr('height', 50)
+    //   .attr('fill', '#222')
+    //   .attr('stroke', 'rgba(255, 255, 255, 0.3)')
+    //   .attr('stroke-width', 1)
+    //   .attr('x', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i) - 100)
+    //   .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 50);
+
+    circleTooltipGroups.append('text')
+      .attr('fill', '#FFFFFF')
+      .text(d => d.name)
+      .attr('width', circleOuterRadius)
+      .attr('text-anchor', 'middle')
+      .attr('x', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
+      .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 110);
+
+    circleGroups.on('mouseover', (d, i) => {
+      d3.select(`#circle-outer-${i}`).transition()
+        .ease(customElasticEasing).duration(500).attr('r', circleOuterRadius * 1.1);
+      d3.select(`#circle-inner-${i}`).transition()
+        .ease(customElasticEasing).duration(500).attr('r', circleInnerRadius * 1.2);
+      d3.select(`#cg-image-inner-${i}`).transition()
+        .ease(customElasticEasing).duration(500)
+        .attr('width', circleInnerRadius * 2 * 1.2)
+        .attr('height', circleInnerRadius * 2 * 1.2);
+      d3.select(`#ctg-${i}`).transition()
+        .duration(500).attr('visibility', 'visible');
+    })
+    .on('mouseleave', (d, i) => {
+      d3.select(`#circle-outer-${i}`).transition()
+        .ease(customElasticEasing).duration(500).attr('r', circleOuterRadius);
+      d3.select(`#circle-inner-${i}`).transition()
+        .ease(customElasticEasing).duration(500).attr('r', circleInnerRadius);
+      d3.select(`#cg-image-inner-${i}`).transition()
+        .ease(customElasticEasing).duration(500)
+        .attr('width', circleInnerRadius * 2)
+        .attr('height', circleInnerRadius * 2);
+      d3.select(`#ctg-${i}`).transition()
+        .duration(500).attr('visibility', 'hidden');
+    });
   }
 
   fetchSuccess(res) {
