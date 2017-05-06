@@ -5,17 +5,18 @@ import * as d3 from 'd3';
 
 const styles = {
   container: {
-    padding: '0 100px',
+    padding: 0,
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
   },
   sectionHeading: {
     color: '#FFFFFF',
     fontSize: '2em',
   },
   svgWrapper: {
-    height: 300,
-    width: '100%',
+    height: 500,
+    width: '80%',
   },
   list: {
     width: '100%',
@@ -23,7 +24,7 @@ const styles = {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    padding: 40,
+    padding: 100,
     boxSizing: 'border-box',
   },
   card: {
@@ -64,21 +65,91 @@ class Profile extends React.Component {
 
   renderSvg() {
     const { recentTracks } = this.state;
-    console.log(recentTracks[0]);
-    //
-    const svg = d3.select('svgWrapper')
+    const dataset = recentTracks.map(track => ({
+      id: track.id,
+      name: track.name,
+      image: track.album.images[0].url,
+    }));
+    console.log(dataset);
+
+    const circleBaseRadius = 50;
+    const circleOuterRadius = 60;
+    const circleInnerRadius = 45;
+    const circleMargin = 10;
+    const customElasticEasing = d3.easeElastic.period(0.6);
+
+    const svg = d3.select('#svgWrapper')
       .append('svg')
         .attr('class', 'recentsSvg')
         .style('width', '100%')
         .style('height', '100%')
         .style('background-color', '#353535')
         .style('border', '1px solid rgba(255, 255, 255, 0.3)')
+        .style('box-sizing', 'border-box')
         .style('padding', 50);
 
-    return true;
-    //
-    // const svgWidth = parseInt(svg.style('width').replace('px', ''), 10);
-    // const svgHeight = parseInt(svg.style('height').replace('px', ''), 10);
+    const circleGroups = svg.selectAll('g')
+      .data(dataset)
+      .enter()
+        .append('g')
+        .attr('id', (d, i) => `circle-group-${i}`);
+
+    circleGroups.append('circle')
+      .attr('r', 0)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
+      .attr('cy', (d, i) => circleOuterRadius * 1)
+      .attr('stroke', '#2ecc71')
+      .attr('stroke-width', 2)
+      .attr('fill', 'none')
+      .attr('visibility', 'hidden')
+      .transition()
+        .duration(1500)
+        .delay((d, i) => i * 110)
+        .ease(customElasticEasing)
+        .attr('r', circleOuterRadius)
+        .attr('visibility', 'visible');
+
+    circleGroups.append('circle')
+      .attr('r', 0)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
+      .attr('cy', (d, i) => (circleOuterRadius * 1) + 50)
+      .attr('fill', '#2ecc71')
+      .attr('visibility', 'hidden')
+      .transition()
+        .duration(1000)
+        .delay((d, i) => i * 100)
+        .ease(customElasticEasing)
+        .attr('r', circleBaseRadius)
+        .attr('cy', (d, i) => circleOuterRadius * 1)
+        .attr('visibility', 'visible');
+
+    const cgDefs = circleGroups.append('defs');
+
+    const cgDefsPatterns = cgDefs.append('pattern')
+      .attr('id', (d, i) => `cg-image-${i}`)
+      .attr('patternUnits', 'objectBoundingBox')
+      .attr('width', 20)
+      .attr('height', 20);
+
+    const cfDegsPatternsImages = cgDefsPatterns.append('image')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', circleInnerRadius * 2)
+      .attr('height', circleInnerRadius * 2)
+      .attr('xlink:href', (d) => d.image);
+
+    circleGroups.append('circle')
+      .attr('r', circleInnerRadius)
+      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * i)
+      .attr('cy', (d, i) => (circleOuterRadius * 1) + 50)
+      .attr('fill', (d, i) => `url(#cg-image-${i})`)
+      .attr('visibility', 'hidden')
+      .transition()
+        .duration(1000)
+        .delay((d, i) => i * 100)
+        .ease(customElasticEasing)
+        .attr('cy', (d, i) => circleOuterRadius * 1)
+        .attr('visibility', 'visible');
   }
 
   fetchSuccess(res) {
