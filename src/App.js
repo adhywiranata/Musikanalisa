@@ -7,6 +7,7 @@ import Login from './containers/Login';
 import AuthSuccess from './containers/AuthSuccess';
 import MyArtists from './containers/MyArtists';
 import Profile from './containers/Profile';
+import NewReleases from './containers/NewReleases';
 import { Header } from './components';
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
           <Header />
           <Route exact path="/" component={MyArtists} />
           <Route path="/login" component={Login} />
+          <Route path="/new-releases" component={NewReleases} />
           <Route path="/me" component={Profile} />
           <Route path="/callback/:access_token/:refresh_token" component={AuthSuccess} />
         </div>
