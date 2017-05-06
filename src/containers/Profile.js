@@ -236,7 +236,7 @@ class Profile extends React.Component {
     return (
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Recent Tracks</h2>
-        <div id='svgWrapper' style={styles.svgWrapper}></div>
+        { !fetchError && <div id='svgWrapper' style={styles.svgWrapper}></div> }
         <div style={styles.list}>
         { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
         { fetchError && (
