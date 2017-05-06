@@ -49,7 +49,7 @@ class NewReleases extends React.Component {
   }
 
   renderSvg() {
-
+    
   }
 
   fetchSuccess(albums) {
@@ -64,8 +64,7 @@ class NewReleases extends React.Component {
         tracks: album.tracks,
       })),
       fetchDone: true,
-    }, () => console.log(this.state.newReleases));
-    // }, () => { this.renderSvg() });
+    }, this.renderSvg);
   }
 
   componentDidMount() {

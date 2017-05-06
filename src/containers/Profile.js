@@ -167,7 +167,7 @@ class Profile extends React.Component {
       .attr('width', circleOuterRadius)
       .attr('text-anchor', 'middle')
       .attr('x', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
-      .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 110);
+      .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 115);
 
     circleGroups.on('mouseover', (d, i) => {
       d3.select(`#circle-outer-${i}`).transition()
@@ -199,7 +199,7 @@ class Profile extends React.Component {
     this.setState({
       recentTracks: res.data.items.map(recent => recent.track),
       fetchDone: true,
-    }, () => { this.renderSvg() });
+    }, this.renderSvg);
   }
 
   componentDidMount() {
