@@ -44,7 +44,7 @@ class MyArtists extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <h2 style={styles.sectionHeading}>{`${this.state.artist}\'s Albums`}</h2>
+        <h2 style={styles.sectionHeading}>{`${this.state.artist}'s Albums`}</h2>
         <div style={styles.list}>
           {this.state.albums.map(album => (
             <div key={album.id} style={styles.card}>

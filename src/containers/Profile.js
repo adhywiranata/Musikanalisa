@@ -1,14 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import * as d3 from 'd3';
 
 const styles = {
   container: {
     padding: '0 100px',
+    display: 'flex',
+    flexDirection: 'column',
   },
   sectionHeading: {
     color: '#FFFFFF',
-    fontSize: '2em'
+    fontSize: '2em',
+  },
+  svgWrapper: {
+    height: 300,
+    width: '100%',
   },
   list: {
     width: '100%',
@@ -55,18 +62,44 @@ class Profile extends React.Component {
     this.setState({ accessToken });
   }
 
+  renderSvg() {
+    const { recentTracks } = this.state;
+    console.log(recentTracks[0]);
+    //
+    const svg = d3.select('svgWrapper')
+      .append('svg')
+        .attr('class', 'recentsSvg')
+        .style('width', '100%')
+        .style('height', '100%')
+        .style('background-color', '#353535')
+        .style('border', '1px solid rgba(255, 255, 255, 0.3)')
+        .style('padding', 50);
+
+    return true;
+    //
+    // const svgWidth = parseInt(svg.style('width').replace('px', ''), 10);
+    // const svgHeight = parseInt(svg.style('height').replace('px', ''), 10);
+  }
+
+  fetchSuccess(res) {
+    this.setState({
+      recentTracks: res.data.items.map(recent => recent.track),
+      fetchDone: true,
+    }, () => { this.renderSvg() });
+  }
+
   componentDidMount() {
-    console.log(this.state.accessToken);
     axios({
       method: 'GET',
       url: 'https://api.spotify.com/v1/me/player/recently-played',
       headers: {
         Authorization: `Bearer ${this.state.accessToken}`,
       }
-    }).then(res => this.setState({
-      recentTracks: res.data.items.map(recent => recent.track),
-      fetchDone: true,
-    })).catch(err => this.setState({ fetchDone: true, fetchError: true }));
+    }).then(res => this.fetchSuccess(res))
+    .catch(err => {
+      console.log(err);
+      this.setState({ fetchDone: true, fetchError: true });
+    });
   }
 
   render() {
@@ -74,6 +107,7 @@ class Profile extends React.Component {
     return (
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Recent Tracks</h2>
+        <div id='svgWrapper' style={styles.svgWrapper}></div>
         <div style={styles.list}>
         { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
         { fetchError && (
@@ -83,8 +117,8 @@ class Profile extends React.Component {
             </button>
           </Link>
         ) }
-        { recentTracks.map(track => (
-          <div key={track.id} style={styles.card}>
+        { recentTracks.map((track, index) => (
+          <div key={index} style={styles.card}>
             <div style={{ position: 'relative' }}>
               <img src={ track.album.images[0].url } width="100%" alt={''} />
               <div style={{ top: 0, width: '100%', height: '98%', position: 'absolute', backgroundColor: 'rgba(0,0,0, .5)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
@@ -95,7 +129,7 @@ class Profile extends React.Component {
               <span style={{ fontSize: '0.8em', color: '#666' }}>Artists</span>
               <ul style={{ padding: 0 }}>
               { track.artists.map(artist => (
-                <Link to="/" style={{ textDecoration: 'none' }}>
+                <Link key={artist.id} to="/" style={{ textDecoration: 'none' }}>
                   <li style={{ color: '#1ED760', fontSize: '0.8em', padding: 0, listStyleType: 'none' }}>
                     { artist.name }
                   </li>
