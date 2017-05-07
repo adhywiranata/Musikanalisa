@@ -159,19 +159,32 @@ class NewReleases extends React.Component {
       .style('font-weight', 700);
   }
 
-  render() {
+  renderFetchedList() {
     const { newReleases, fetchDone, fetchError } = this.state;
+    if (!fetchError && fetchDone) {
+      return (
+        <div>
+          <div id="svgWrapper" style={styles.svgWrapper} />
+          <AlbumList items={newReleases} />
+        </div>
+      );
+    }
+    if (fetchError && fetchDone) {
+      return (
+        <LinkButton
+          linkTo={'/login'}
+          label={'Sorry, something went wrong. Please login to Spotify'}
+        />
+      );
+    }
+    return (<p style={{ color: '#FFFFFF' }}>Loading...</p>);
+  }
+
+  render() {
     return (
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>New Releases</h2>
-        { !fetchError && <div id="svgWrapper" style={styles.svgWrapper} /> }
-        <div style={styles.list}>
-          { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
-          { fetchError && (
-            <LinkButton linkTo={'/login'} label={'Sorry, something went wrong. Please login to Spotify'} />
-          ) }
-          <AlbumList items={newReleases} />
-        </div>
+        { this.renderFetchedList() }
       </div>
     );
   }
