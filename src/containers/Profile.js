@@ -200,7 +200,7 @@ class Profile extends React.Component {
     const { recentTracks, fetchDone, fetchError } = this.state;
     if (!fetchError && fetchDone) {
       return (
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <div id="svgWrapper" style={styles.svgWrapper} />
           <TrackList items={recentTracks} />
         </div>

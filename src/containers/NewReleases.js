@@ -163,7 +163,7 @@ class NewReleases extends React.Component {
     const { newReleases, fetchDone, fetchError } = this.state;
     if (!fetchError && fetchDone) {
       return (
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <div id="svgWrapper" style={styles.svgWrapper} />
           <AlbumList items={newReleases} />
         </div>
