@@ -15,6 +15,7 @@ const styles = {
   sectionHeading: {
     color: '#FFFFFF',
     fontSize: '2em',
+    marginBottom: 80,
   },
   svgWrapper: {
     height: 900,

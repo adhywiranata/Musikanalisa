@@ -6,7 +6,7 @@ Data visualization of top artists, musics, and albums from Spotify. Developed us
 
 #### __Top New Releases__ 🎉
 analytics about new releases which earned high popularity
-  - [API - GET New Releases](https://developer.spotify.com/web-api/get-list-new-releases/) *WIP*
+  - [API - GET New Releases](https://developer.spotify.com/web-api/get-list-new-releases/)
 
 #### __Categories Collections__ 🎉
 collections of categories
