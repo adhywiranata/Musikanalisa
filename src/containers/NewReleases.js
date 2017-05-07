@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import * as d3 from 'd3';
 
 import AlbumList from '../components/AlbumList';
+import { LinkButton } from '../components';
 
 const styles = {
   container: {
@@ -181,11 +181,7 @@ class NewReleases extends React.Component {
         <div style={styles.list}>
         { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
         { fetchError && (
-          <Link to="/login">
-            <button style={styles.btn}>
-              Sorry, Something went wrong. You have to login to spotify!
-            </button>
-          </Link>
+          <LinkButton linkTo={'/login'} label={'Sorry, something went wrong. Please login to Spotify'} />
         ) }
         <AlbumList items={newReleases} />
         </div>
