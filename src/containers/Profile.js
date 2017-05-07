@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import * as d3 from 'd3';
 
 import TrackList from '../components/TrackList';
+import { LinkButton } from '../components';
 
 const styles = {
   container: {
@@ -20,17 +20,7 @@ const styles = {
     height: 900,
     width: '80%',
   },
-  btn: {
-    backgroundColor: '#1ED760',
-    padding: 20,
-    border: 0,
-    borderRadius: 10,
-    fontSize: '1.3em',
-    cursor: 'pointer',
-    color: '#FFFFFF',
-    outline: 'none',
-  },
-}
+};
 
 class Profile extends React.Component {
   constructor(props) {
@@ -40,12 +30,32 @@ class Profile extends React.Component {
       recentTracks: [],
       fetchDone: false,
       fetchError: false,
-    }
+    };
   }
 
   componentWillMount() {
     const accessToken = localStorage.getItem('accessToken');
     this.setState({ accessToken });
+  }
+
+  componentDidMount() {
+    axios({
+      method: 'GET',
+      url: 'https://api.spotify.com/v1/me/player/recently-played',
+      headers: {
+        Authorization: `Bearer ${this.state.accessToken}`,
+      },
+    }).then(res => this.fetchSuccess(res))
+    .catch(() => {
+      this.setState({ fetchDone: true, fetchError: true });
+    });
+  }
+
+  fetchSuccess(res) {
+    this.setState({
+      recentTracks: res.data.items.map(recent => recent.track),
+      fetchDone: true,
+    }, this.renderSvg);
   }
 
   renderSvg() {
@@ -55,7 +65,6 @@ class Profile extends React.Component {
       name: track.name,
       image: track.album.images[0].url,
     }));
-    console.log(dataset);
 
     const circleBaseRadius = 80;
     const circleOuterRadius = 90;
@@ -65,9 +74,9 @@ class Profile extends React.Component {
 
     // items are indexed from 0 to X. each time we got 5 items in a row,
     // reset the x position to 0
-    const circleIndexXPosition = index => index % 5
+    const circleIndexXPosition = index => index % 5;
     // modify the y by adding them
-    const circleIndexYPosition = index => Math.floor(index / 5) + 1
+    const circleIndexYPosition = index => Math.floor(index / 5) + 1;
 
     const svg = d3.select('#svgWrapper')
       .append('svg')
@@ -100,13 +109,13 @@ class Profile extends React.Component {
       .attr('y', 0)
       .attr('width', circleInnerRadius * 2)
       .attr('height', circleInnerRadius * 2)
-      .attr('xlink:href', (d) => d.image);
+      .attr('xlink:href', d => d.image);
 
     circleGroups.append('circle')
       .attr('id', (d, i) => `circle-outer-${i}`)
       .attr('r', 0)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
-      .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
+      .attr('cx', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i))
       .attr('stroke', '#2ecc71')
       .attr('stroke-width', 2)
       .attr('fill', 'none')
@@ -119,8 +128,8 @@ class Profile extends React.Component {
 
     circleGroups.append('circle')
       .attr('r', 0)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
-      .attr('cy', (d, i) => ((circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i)) + 50)
+      .attr('cx', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => (((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i)) + 50)
       .attr('fill', '#2ecc71')
       .attr('visibility', 'hidden')
       .transition()
@@ -128,52 +137,42 @@ class Profile extends React.Component {
         .delay((d, i) => i * 100)
         .ease(customElasticEasing)
         .attr('r', circleBaseRadius)
-        .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
+        .attr('cy', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
 
     circleGroups.append('circle')
       .attr('id', (d, i) => `circle-inner-${i}`)
       .attr('r', circleInnerRadius)
-      .attr('cx', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
-      .attr('cy', (d, i) => ((circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i)) + 50)
+      .attr('cx', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexXPosition(i))
+      .attr('cy', (d, i) => (((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i)) + 50)
       .attr('fill', (d, i) => `url(#cg-image-${i})`)
       .attr('visibility', 'hidden')
       .transition()
         .duration(1000)
         .delay((d, i) => i * 100)
         .ease(customElasticEasing)
-        .attr('cy', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i))
+        .attr('cy', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i))
         .attr('visibility', 'visible');
 
     const circleTooltipGroups = circleGroups.append('g')
       .attr('id', (d, i) => `ctg-${i}`)
       .attr('visibility', 'hidden');
 
-    // circleTooltipGroups.append('rect')
-    //   .transition()
-    //   .duration(1000)
-    //   .delay(3000)
-    //   .attr('width', circleOuterRadius * 4)
-    //   .attr('height', 50)
-    //   .attr('fill', '#222')
-    //   .attr('stroke', 'rgba(255, 255, 255, 0.3)')
-    //   .attr('stroke-width', 1)
-    //   .attr('x', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i) - 100)
-    //   .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 50);
-
     circleTooltipGroups.append('text')
       .attr('fill', '#FFFFFF')
       .text(d => d.name)
       .attr('width', circleOuterRadius)
       .attr('text-anchor', 'middle')
-      .attr('x', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexXPosition(i))
-      .attr('y', (d, i) => (circleOuterRadius * 2 + circleMargin) * circleIndexYPosition(i) + 115);
+      .attr('x', (d, i) => ((circleOuterRadius * 2) + circleMargin) * circleIndexXPosition(i))
+      .attr('y', (d, i) => (((circleOuterRadius * 2) + circleMargin) * circleIndexYPosition(i)) + 115);
 
     circleGroups.on('mouseover', (d, i) => {
       d3.select(`#circle-outer-${i}`).transition()
-        .ease(customElasticEasing).duration(500).attr('r', circleOuterRadius * 1.1);
+        .ease(customElasticEasing).duration(500)
+        .attr('r', circleOuterRadius * 1.1);
       d3.select(`#circle-inner-${i}`).transition()
-        .ease(customElasticEasing).duration(500).attr('r', circleInnerRadius * 1.2);
+        .ease(customElasticEasing).duration(500)
+        .attr('r', circleInnerRadius * 1.2);
       d3.select(`#cg-image-inner-${i}`).transition()
         .ease(customElasticEasing).duration(500)
         .attr('width', circleInnerRadius * 2 * 1.2)
@@ -183,9 +182,11 @@ class Profile extends React.Component {
     })
     .on('mouseleave', (d, i) => {
       d3.select(`#circle-outer-${i}`).transition()
-        .ease(customElasticEasing).duration(500).attr('r', circleOuterRadius);
+        .ease(customElasticEasing).duration(500)
+        .attr('r', circleOuterRadius);
       d3.select(`#circle-inner-${i}`).transition()
-        .ease(customElasticEasing).duration(500).attr('r', circleInnerRadius);
+        .ease(customElasticEasing).duration(500)
+        .attr('r', circleInnerRadius);
       d3.select(`#cg-image-inner-${i}`).transition()
         .ease(customElasticEasing).duration(500)
         .attr('width', circleInnerRadius * 2)
@@ -195,42 +196,17 @@ class Profile extends React.Component {
     });
   }
 
-  fetchSuccess(res) {
-    this.setState({
-      recentTracks: res.data.items.map(recent => recent.track),
-      fetchDone: true,
-    }, this.renderSvg);
-  }
-
-  componentDidMount() {
-    axios({
-      method: 'GET',
-      url: 'https://api.spotify.com/v1/me/player/recently-played',
-      headers: {
-        Authorization: `Bearer ${this.state.accessToken}`,
-      }
-    }).then(res => this.fetchSuccess(res))
-    .catch(err => {
-      console.log(err);
-      this.setState({ fetchDone: true, fetchError: true });
-    });
-  }
-
   render() {
     const { recentTracks, fetchDone, fetchError } = this.state;
     return (
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Recent Tracks</h2>
-        { !fetchError && <div id='svgWrapper' style={styles.svgWrapper}></div> }
+        { !fetchError && <div id="svgWrapper" style={styles.svgWrapper} /> }
         { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
         { fetchError && (
-          <Link to="/login">
-            <button style={styles.btn}>
-              Sorry, Something went wrong. You have to login to spotify!
-            </button>
-          </Link>
+          <LinkButton linkTo={'/login'} label={'Sorry, something went wrong. Please login to Spotify'} />
         ) }
-        <TrackList items={ recentTracks } />
+        <TrackList items={recentTracks} />
       </div>
     );
   }
