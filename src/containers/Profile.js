@@ -196,17 +196,32 @@ class Profile extends React.Component {
     });
   }
 
-  render() {
+  renderFetchedList() {
     const { recentTracks, fetchDone, fetchError } = this.state;
+    if (!fetchError && fetchDone) {
+      return (
+        <div>
+          <div id="svgWrapper" style={styles.svgWrapper} />
+          <TrackList items={recentTracks} />
+        </div>
+      );
+    }
+    if (fetchError && fetchDone) {
+      return (
+        <LinkButton
+          linkTo={'/login'}
+          label={'Sorry, something went wrong. Please login to Spotify'}
+        />
+      );
+    }
+    return (<p style={{ color: '#FFFFFF' }}>Loading...</p>);
+  }
+
+  render() {
     return (
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Recent Tracks</h2>
-        { !fetchError && <div id="svgWrapper" style={styles.svgWrapper} /> }
-        { !fetchDone && <p style={{ color: '#FFFFFF' }}>Loading...</p> }
-        { fetchError && (
-          <LinkButton linkTo={'/login'} label={'Sorry, something went wrong. Please login to Spotify'} />
-        ) }
-        <TrackList items={recentTracks} />
+        { this.renderFetchedList() }
       </div>
     );
   }
