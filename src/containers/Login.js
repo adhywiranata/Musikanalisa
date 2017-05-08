@@ -35,7 +35,7 @@ class Login extends React.Component {
         <h2 style={{ color: '#FFFFFF', fontSize: '2em' }}>Login to Musikanalisa</h2>
         <a href="http://localhost:1234/login/">
           <button style={styles.btn}>
-            Login via Spotify
+            Login to Spotify
           </button>
         </a>
       </div>
