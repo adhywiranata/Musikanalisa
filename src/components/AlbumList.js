@@ -19,35 +19,35 @@ const styles = {
     borderRadius: 5,
     paddingBottom: 20,
   },
-}
+};
 
-const AlbumList = ({items}) => (
+const AlbumList = ({ items }) => (
   <div style={styles.list}>
-  { items.map((item, index) => (
-    <div key={index} style={styles.card}>
-      <div style={{ position: 'relative' }}>
-        <img src={ item.images[0].url } width="100%" alt={''} />
-        <div style={{ top: 0, width: '100%', height: '98%', position: 'absolute', backgroundColor: 'rgba(0,0,0, .5)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <h4 style={{ color: '#FFFFFF', bottom: 20, textAlign: 'center' }}>{ item.name }</h4>
+    { items.map((item, index) => (
+      <div key={index} style={styles.card}>
+        <div style={{ position: 'relative' }}>
+          <img src={item.images[0].url} width="100%" alt={''} />
+          <div style={{ top: 0, width: '100%', height: '98%', position: 'absolute', backgroundColor: 'rgba(0,0,0, .5)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+            <h4 style={{ color: '#FFFFFF', bottom: 20, textAlign: 'center' }}>{ item.name }</h4>
+          </div>
+        </div>
+        <div>
+          <p style={{ fontSize: '0.8em', color: '#333' }}>Released on: { item.release_date }</p>
+          <p style={{ fontSize: '0.8em', color: '#333' }}>Popularity: { item.popularity }</p>
+          <span style={{ fontSize: '0.8em', color: '#666' }}>Artists</span>
+          <ul style={{ padding: 0 }}>
+            { item.artists.map(artist => (
+              <Link key={artist.id} to="/" style={{ textDecoration: 'none' }}>
+                <li style={{ color: '#1ED760', fontSize: '0.8em', padding: 0, listStyleType: 'none' }}>
+                  { artist.name }
+                </li>
+              </Link>),
+            )}
+          </ul>
         </div>
       </div>
-      <div>
-        <p style={{ fontSize: '0.8em', color: '#333' }}>Released on: { item.release_date }</p>
-        <p style={{ fontSize: '0.8em', color: '#333' }}>Popularity: { item.popularity }</p>
-        <span style={{ fontSize: '0.8em', color: '#666' }}>Artists</span>
-        <ul style={{ padding: 0 }}>
-        { item.artists.map(artist => (
-          <Link key={artist.id} to="/" style={{ textDecoration: 'none' }}>
-            <li style={{ color: '#1ED760', fontSize: '0.8em', padding: 0, listStyleType: 'none' }}>
-              { artist.name }
-            </li>
-          </Link>)
-        )}
-        </ul>
-      </div>
-    </div>
-    )
-  )}
+    ),
+    )}
   </div>
 );
 
