@@ -1,65 +1,64 @@
 import React from 'react';
+import glamorous from 'glamorous';
 import { Link } from 'react-router-dom';
 
-import styled from 'styled-components';
+const Box = glamorous.div({});
 
-const Box = styled.div``;
+const RelativeBox = glamorous.div({
+  position: 'relative',
+});
 
-const RelativeBox = styled.div`
-  position: relative;
-`;
+const List = glamorous.div({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  padding: 100,
+  boxSizing: 'border-box',
+});
 
-const List = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 100px;
-  box-sizing: border-box;
-`;
+const Card = glamorous.div({
+  width: '20%',
+  margin: '20px 10px',
+  padding: 0,
+  backgroundColor: '#FFFFFF',
+  borderRadius: 5,
+  paddingBottom: 20,
+});
 
-const Card = styled.div`
-  width: 20%;
-  margin: 20px 10px;
-  padding: 0px;
-  background-color: #FFFFFF;
-  border-radius: 5px;
-  padding-bottom: 20px;
-`;
+const ImageOverlay = glamorous.div({
+  top: 0,
+  width: '100%',
+  height: '98%',
+  position: 'absolute',
+  backgroundColor: 'rgba(0,0,0, .5)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
+});
 
-const ImageOverlay = styled.div`
-  top: 0;
-  width: 100%;
-  height: 98%;
-  position: absolute;
-  background-color: rgba(0,0,0, .5);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-`;
+const Title = glamorous.h4({
+  color: '#FFFFFF',
+  bottom: 20,
+  textAlign: 'center',
+});
 
-const Title = styled.h4`
-  color: #FFFFFF;
-  bottom: 20;
-  text-align: center;
-`;
+const Text = glamorous.p({
+  fontSize: '0.8em',
+  color: '#333333',
+});
 
-const Text = styled.p`
-  font-size: 0.8em;
-  color: #333333;
-`;
+const Ul = glamorous.ul({
+  padding: 0,
+});
 
-const Ul = styled.ul`
-  padding: 0;
-`;
-
-const Li = styled.li`
-  color: #1ED760;
-  fontSize: 0.8em;
-  padding: 0;
-  list-style-type: none;
-`;
+const Li = glamorous.li({
+  color: '#1ED760',
+  fontSize: '0.8em',
+  padding: 0,
+  listStyleType: 'none',
+});
 
 const AlbumList = ({ items }) => (
   <List>
