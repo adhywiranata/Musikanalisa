@@ -7,7 +7,7 @@ const styles = {
   },
   sectionHeading: {
     color: '#FFFFFF',
-    fontSize: '2em'
+    fontSize: '2em',
   },
   list: {
     width: '100%',
@@ -25,7 +25,7 @@ const styles = {
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
   },
-}
+};
 
 class MyArtists extends React.Component {
   constructor(props) {
@@ -33,12 +33,12 @@ class MyArtists extends React.Component {
     this.state = {
       artist: 'Aimer',
       albums: [],
-    }
+    };
   }
 
   componentDidMount() {
     axios('https://api.spotify.com/v1/artists/0bAsR2unSRpn6BQPEnNlZm/albums')
-      .then(res => this.setState({ albums: res.data.items }))
+      .then(res => this.setState({ albums: res.data.items }));
   }
 
   render() {
@@ -48,7 +48,7 @@ class MyArtists extends React.Component {
         <div style={styles.list}>
           {this.state.albums.map(album => (
             <div key={album.id} style={styles.card}>
-              <img src={ album.images[0].url} width="100%" />
+              <img src={album.images[0].url} width="100%" />
               <h4>{ album.name }</h4>
             </div>
           ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-// import * as d3 from 'd3';
+import * as d3 from 'd3';
 
 import { LinkButton } from '../components';
 import ArtistList from '../components/ArtistList';
