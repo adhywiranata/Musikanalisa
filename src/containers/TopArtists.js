@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import { LinkButton } from '../components';
 import ArtistList from '../components/ArtistList';
@@ -18,7 +19,7 @@ const styles = {
     marginBottom: 80,
   },
   svgWrapper: {
-    height: 900,
+    height: 1600,
     width: '80%',
   },
 };
@@ -42,7 +43,7 @@ class Profile extends React.Component {
   componentDidMount() {
     axios({
       method: 'GET',
-      url: 'https://api.spotify.com/v1/me/top/artists',
+      url: 'https://api.spotify.com/v1/me/top/artists?limit=50',
       headers: {
         Authorization: `Bearer ${this.state.accessToken}`,
       },
@@ -69,7 +70,106 @@ class Profile extends React.Component {
       image: artist.images[0].url,
       genres: artist.genres,
     }));
-    console.log(dataset);
+
+    const svg = d3.select('#svgWrapper')
+      .append('svg')
+        .attr('id', 'topArtistSvg')
+        .style('width', '100%')
+        .style('height', '100%')
+        .style('background-color', '#353535')
+        .style('border', '1px solid rgba(255, 255, 255, 0.3)')
+        .style('box-sizing', 'border-box')
+        .style('padding', 50);
+
+    const svgWidth = 1000;
+    const svgHeight = 1200;
+    const barPadding = 10;
+    const artistsLimit = 20;
+    const barVerticalMargin = 5;
+    // const customElasticEasing = d3.easeElastic.period(0.3);
+    const artistsTopFollowers = _.orderBy(dataset, ['followers'], ['desc'])
+      .filter((item, index) => index < artistsLimit);
+    console.log(d3.max(artistsTopFollowers.map(data => data.followers)));
+
+    const xScale = d3.scaleLinear()
+      .domain([0, d3.max(artistsTopFollowers.map(data => data.followers))])
+      .range([0, svgWidth]);
+
+    console.log(xScale(9190788));
+
+    const barGroups = svg.selectAll('g').data(artistsTopFollowers).enter().append('g');
+
+    const bgDefs = barGroups.append('defs');
+
+    const bgDefsPatterns = bgDefs.append('pattern')
+      .attr('id', (d, i) => `bg-image-${i}`)
+      .attr('patternUnits', 'objectBoundingBox')
+      .attr('width', 10)
+      .attr('height', 10);
+
+    bgDefsPatterns.append('image')
+      .attr('id', (d, i) => `bg-image-inner-${i}`)
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', 80)
+      .attr('height', 80)
+      .attr('xlink:href', d => d.image);
+
+    barGroups.append('rect')
+      .attr('fill', (d, i) => `url(#bg-image-${i})`)
+      .attr('opacity', 0)
+      .attr('width', 80)
+      .attr('height', (svgHeight / artistsLimit) + barPadding)
+      .attr('y', (d, i) => (((svgHeight / artistsLimit) + barPadding) * i) + (barVerticalMargin * i))
+      .attr('x', 10)
+      .transition()
+      .duration(500)
+      .delay((d, i) => i * 500)
+      .attr('opacity', 1);
+
+    barGroups.append('text')
+      .attr('fill', '#FFFFFF')
+      .attr('opacity', 0)
+      .text(d => d.name)
+      .attr('font-size', 14)
+      .attr('y', (d, i) => (((svgHeight / artistsLimit) + barPadding) * i) + (barVerticalMargin * i) + 20)
+      .attr('x', 100)
+      .transition()
+      .duration(500)
+      .delay((d, i) => (i + 1) * 500)
+      .attr('opacity', 1);
+
+    barGroups.append('text')
+      .attr('fill', '#AAAAAA')
+      .attr('opacity', 0)
+      .text(d => `${d.followers} followers`)
+      .attr('font-size', 14)
+      .attr('text-anchor', 'end')
+      .attr('y', (d, i) => (((svgHeight / artistsLimit) + barPadding) * i) + (barVerticalMargin * i) + 70)
+      .attr('x', (d) => {
+        if (xScale(d.followers) >= 100) {
+          return 100 + (xScale(d.followers) * 0.9);
+        }
+        return 230;
+      })
+      .transition()
+      .duration(500)
+      .delay((d, i) => (i + 1) * 500)
+      .attr('opacity', 1);
+
+    barGroups.append('rect')
+      .attr('fill', '#2ecc71')
+      .attr('width', 0)
+      .attr('height', svgHeight / artistsLimit / 3)
+      .attr('y', (d, i) => (((svgHeight / artistsLimit) + barPadding) * i) + (barVerticalMargin * i) + 30)
+      .attr('x', 100)
+      .attr('rx', 5)
+      .attr('ry', 5)
+      .transition()
+      .duration(1000)
+      .delay((d, i) => (i + 1) * 500)
+      .ease(d3.easeBounceOut)
+      .attr('width', d => xScale(d.followers) * 0.9);
   }
 
   renderFetchedList() {
