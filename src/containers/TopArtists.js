@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
 
 import { LinkButton } from '../components';
 
@@ -65,14 +65,14 @@ class Profile extends React.Component {
       name: artist.name,
       popularity: artist.popularity,
       followers: artist.followers.total,
-      image: artist.album.images[0].url,
+      image: artist.images[0].url,
       genres: artist.genres,
     }));
     console.log(dataset);
   }
 
   renderFetchedList() {
-    const { topArtists, fetchDone, fetchError } = this.state;
+    const { fetchDone, fetchError } = this.state;
     if (!fetchError && fetchDone) {
       return (
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
