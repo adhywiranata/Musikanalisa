@@ -21,7 +21,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/new-releases" component={NewReleases} />
           <Route path="/me" component={Profile} />
-          <Route path="/top" component={TopArtists} />
+          <Route path="/artists" component={TopArtists} />
           <Route path="/callback/:access_token/:refresh_token" component={AuthSuccess} />
         </div>
       </BrowserRouter>

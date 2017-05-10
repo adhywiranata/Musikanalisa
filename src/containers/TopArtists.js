@@ -96,6 +96,7 @@ class Profile extends React.Component {
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Top Artists</h2>
         { this.renderFetchedList() }
+        <h2 style={styles.sectionHeading}>My Followed Artists</h2>
       </div>
     );
   }
