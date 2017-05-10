@@ -15,11 +15,7 @@ analytics about user's recent played tracks.
 
 #### __My Top Artists and Tracks__ 🎵
 analytics about user's top artists and Tracks.
-  - 🔗 [API - GET top artists and tracks](https://developer.spotify.com/web-api/get-users-top-artists-and-tracks/) *WIP*
-
-#### __My Followed Artists__ 👱
-analytics about user's top artists and Tracks.
-  - 🔗 [API - GET following](https://developer.spotify.com/web-api/get-followed-artists/) *WIP*
+  - 🔗 [API - GET top artists and tracks](https://developer.spotify.com/web-api/get-users-top-artists-and-tracks/)
 
 #### __Categories Collections__ 🎉
 collections of categories
