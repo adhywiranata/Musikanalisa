@@ -3,6 +3,7 @@ import axios from 'axios';
 // import * as d3 from 'd3';
 
 import { LinkButton } from '../components';
+import ArtistList from '../components/ArtistList';
 
 const styles = {
   container: {
@@ -72,11 +73,12 @@ class Profile extends React.Component {
   }
 
   renderFetchedList() {
-    const { fetchDone, fetchError } = this.state;
+    const { topArtists, fetchDone, fetchError } = this.state;
     if (!fetchError && fetchDone) {
       return (
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <div id="svgWrapper" style={styles.svgWrapper} />
+          <ArtistList items={topArtists} />
         </div>
       );
     }
@@ -96,7 +98,6 @@ class Profile extends React.Component {
       <div style={styles.container}>
         <h2 style={styles.sectionHeading}>My Top Artists</h2>
         { this.renderFetchedList() }
-        <h2 style={styles.sectionHeading}>My Followed Artists</h2>
       </div>
     );
   }
