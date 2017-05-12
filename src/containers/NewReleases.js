@@ -151,7 +151,7 @@ class NewReleases extends React.Component {
       .attr('fill', 'rgba(255, 255, 255, 0.5)')
       .attr('font-size', 12)
       .text(d => d.popularity)
-      .attr('x', (d, i) => (i + 1) * (svgWidth / 20) - (barPadding / 2) - 2)
+      .attr('x', (d, i) => ((i + 1) * (svgWidth / 20)) - (barPadding / 2) - 2)
       .attr('y', svgHeight)
     .transition()
       .duration(1000)
@@ -164,7 +164,7 @@ class NewReleases extends React.Component {
       .attr('opacity', 0)
       .attr('fill', 'transparent')
       .attr('width', (svgWidth / 20) + 5)
-      .attr('x', (d, i) => ((svgWidth / 20) * i) + barPadding - 10)
+      .attr('x', (d, i) => (((svgWidth / 20) * i) + barPadding) - 10)
       .attr('height', svgHeight + 20)
       .attr('y', -20);
 

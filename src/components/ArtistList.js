@@ -1,6 +1,5 @@
 import React from 'react';
 import glamorous from 'glamorous';
-import { Link } from 'react-router-dom';
 
 const Box = glamorous.div({});
 

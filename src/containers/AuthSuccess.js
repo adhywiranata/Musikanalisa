@@ -21,15 +21,9 @@ const styles = {
     color: '#FFFFFF',
     outline: 'none',
   },
-}
+};
 
 class AuthSuccess extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    }
-  }
-
   componentDidMount() {
     const { access_token, refresh_token } = this.props.match.params;
     localStorage.setItem('accessToken', access_token);
