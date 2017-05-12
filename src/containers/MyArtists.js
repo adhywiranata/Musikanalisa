@@ -49,7 +49,7 @@ class MyArtists extends React.Component {
     return (
       <div style={styles.container}>
         { this.state.artist !== '' && (
-          <h2 style={styles.sectionHeading}>{`${this.state.artist}'s Albums`}</h2>
+          <h2 style={styles.sectionHeading}>{`${this.state.artist}'s Musics`}</h2>
         )}
         <div style={styles.list}>
           {this.state.albums.map(album => (

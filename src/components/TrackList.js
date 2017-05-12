@@ -35,7 +35,7 @@ const TrackList = ({ items }) => (
           <span style={{ fontSize: '0.8em', color: '#666' }}>Artists</span>
           <ul style={{ padding: 0 }}>
             { item.artists.map(artist => (
-              <Link key={artist.id} to="/" style={{ textDecoration: 'none' }}>
+              <Link key={artist.id} to={`/artist/${artist.id}`} style={{ textDecoration: 'none' }}>
                 <li style={{ color: '#1ED760', fontSize: '0.8em', padding: 0, listStyleType: 'none' }}>
                   { artist.name }
                 </li>
