@@ -42,11 +42,11 @@ class MyArtists extends React.Component {
     axios(`https://api.spotify.com/v1/artists/${artistId}`)
       .then(res => this.setState({ artist: res.data.name }));
     axios(`https://api.spotify.com/v1/artists/${artistId}/albums`)
-      .then(res => {
+      .then((res) => {
         const albums = _.uniqBy(res.data.items, 'name');
         const albumsId = albums.map(album => album.id).join(',');
         axios(`https://api.spotify.com/v1/albums/?ids=${albumsId}`)
-          .then(res => this.setState({ albums: res.data.albums }));
+          .then(resInner => this.setState({ albums: resInner.data.albums }));
       });
   }
 
