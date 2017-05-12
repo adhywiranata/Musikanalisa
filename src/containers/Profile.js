@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import TrackList from '../components/TrackList';
 import { LinkButton } from '../components';
@@ -54,7 +55,7 @@ class Profile extends React.Component {
 
   fetchSuccess(res) {
     this.setState({
-      recentTracks: res.data.items.map(recent => recent.track),
+      recentTracks: _.uniqBy(res.data.items.map(recent => recent.track), 'id'),
       fetchDone: true,
     }, this.renderSvg);
   }
