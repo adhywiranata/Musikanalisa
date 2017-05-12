@@ -148,11 +148,16 @@ class NewReleases extends React.Component {
       .attr('transform', 'rotate(90) translate(0, -20)');
 
     barGroup.append('text')
-      .attr('fill', 'rgba(255, 255, 255, 0.8)')
+      .attr('fill', 'rgba(255, 255, 255, 0.5)')
       .attr('font-size', 12)
       .text(d => d.popularity)
-      .attr('x', (d, i) => (i + 1) * (svgWidth / 20) - (barPadding / 2))
-      .attr('y', svgHeight + 20);
+      .attr('x', (d, i) => (i + 1) * (svgWidth / 20) - (barPadding / 2) - 2)
+      .attr('y', svgHeight)
+    .transition()
+      .duration(1000)
+      .delay((d, i) => i * 100)
+      .ease(customElasticEasing)
+      .attr('y', d => yScale(d.popularity) - 5);
 
     const barGroupBack = barGroup.append('rect')
       .attr('class', (d, i) => `bar-group-back bar-group-background-${i}`)
@@ -160,8 +165,8 @@ class NewReleases extends React.Component {
       .attr('fill', 'transparent')
       .attr('width', (svgWidth / 20) + 5)
       .attr('x', (d, i) => ((svgWidth / 20) * i) + barPadding - 10)
-      .attr('height', svgHeight + 10)
-      .attr('y', -10);
+      .attr('height', svgHeight + 20)
+      .attr('y', -20);
 
     barGroupBack.on('mouseenter', (d, i) => {
       svg.select(`.bar-group-text-${i}`).attr('fill', 'rgba(255, 255, 255, 1)');
