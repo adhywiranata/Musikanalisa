@@ -42,7 +42,12 @@ class MyArtists extends React.Component {
     axios(`https://api.spotify.com/v1/artists/${artistId}`)
       .then(res => this.setState({ artist: res.data.name }));
     axios(`https://api.spotify.com/v1/artists/${artistId}/albums`)
-      .then(res => this.setState({ albums: _.uniqBy(res.data.items, 'name') }));
+      .then(res => {
+        const albums = _.uniqBy(res.data.items, 'name');
+        const albumsId = albums.map(album => album.id).join(',');
+        axios(`https://api.spotify.com/v1/albums/?ids=${albumsId}`)
+          .then(res => this.setState({ albums: res.data.albums }));
+      });
   }
 
   render() {
@@ -56,6 +61,8 @@ class MyArtists extends React.Component {
             <div key={album.id} style={styles.card}>
               <img src={album.images[0].url} width="100%" />
               <h4>{ album.name }</h4>
+              <p>Popularity: { album.popularity }</p>
+              <p>{ album.release_date }</p>
             </div>
           ))}
         </div>
