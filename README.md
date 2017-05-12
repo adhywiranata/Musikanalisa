@@ -18,7 +18,7 @@ analytics about user's top artists and Tracks.
   - 🔗 [API - GET top artists and tracks](https://developer.spotify.com/web-api/get-users-top-artists-and-tracks/)
 
 #### __Artists Album Analytics__ 📉
-analytics about an artists album popularities.
+analytics about an artists album popularities. *WIP*
   - 🔗 [API - GET artist's albums](https://api.spotify.com/v1/artists/{id}/albums)
   - 🔗 [API - GET several albums details](https://developer.spotify.com/web-api/get-several-albums/), to get popularity and release_date
 
