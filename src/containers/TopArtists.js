@@ -89,13 +89,10 @@ class Profile extends React.Component {
     // const customElasticEasing = d3.easeElastic.period(0.3);
     const artistsTopFollowers = _.orderBy(dataset, ['followers'], ['desc'])
       .filter((item, index) => index < artistsLimit);
-    console.log(d3.max(artistsTopFollowers.map(data => data.followers)));
 
     const xScale = d3.scaleLinear()
       .domain([0, d3.max(artistsTopFollowers.map(data => data.followers))])
       .range([0, svgWidth]);
-
-    console.log(xScale(9190788));
 
     const barGroups = svg.selectAll('g').data(artistsTopFollowers).enter().append('g');
 
@@ -104,22 +101,23 @@ class Profile extends React.Component {
     const bgDefsPatterns = bgDefs.append('pattern')
       .attr('id', (d, i) => `bg-image-${i}`)
       .attr('patternUnits', 'objectBoundingBox')
-      .attr('width', 10)
-      .attr('height', 10);
+      .attr('width', 1)
+      .attr('height', 1);
 
     bgDefsPatterns.append('image')
       .attr('id', (d, i) => `bg-image-inner-${i}`)
       .attr('x', 0)
       .attr('y', 0)
-      .attr('width', 80)
-      .attr('height', 80)
+      .attr('width', 70)
+      .attr('height', 70)
       .attr('xlink:href', d => d.image);
 
     barGroups.append('rect')
       .attr('fill', (d, i) => `url(#bg-image-${i})`)
       .attr('opacity', 0)
+      // .attr('height', (svgHeight / artistsLimit) + barPadding)
       .attr('width', 80)
-      .attr('height', (svgHeight / artistsLimit) + barPadding)
+      .attr('height', 80)
       .attr('y', (d, i) => (((svgHeight / artistsLimit) + barPadding) * i) + (barVerticalMargin * i))
       .attr('x', 10)
       .transition()
