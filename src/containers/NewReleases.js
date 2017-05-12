@@ -101,7 +101,7 @@ class NewReleases extends React.Component {
     // we'll show 20 bar charts
     const svgWidth = 1000;
     const svgHeight = 500;
-    const barPadding = 40;
+    const barPadding = 30;
     const customElasticEasing = d3.easeElastic.period(0.7);
     const popularities = dataset.map(item => item.popularity);
 
@@ -109,16 +109,21 @@ class NewReleases extends React.Component {
       .domain([0, d3.max(popularities)])
       .range([svgHeight, 0]);
 
-    const barGroup = svg.selectAll('g').data(dataset).enter().append('g');
+    const barGroup = svg.selectAll('g')
+      .data(dataset)
+      .enter()
+      .append('g')
+      .attr('class', (d, i) => `bar-group-${i}`);
 
     barGroup.append('rect')
-        .attr('fill', 'none')
-        .attr('stroke', 'rgba(255, 255, 255, 0.3)')
-        .attr('stroke-width', 1)
-        .attr('width', (svgWidth / 20) - barPadding)
-        .attr('x', (d, i) => ((svgWidth / 20) * i) + barPadding)
-        .attr('height', svgHeight)
-        .attr('y', 0);
+      .attr('class', (d, i) => `bar-group-contain-${i}`)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(255, 255, 255, 0.3)')
+      .attr('stroke-width', 1)
+      .attr('width', (svgWidth / 20) - barPadding)
+      .attr('x', (d, i) => ((svgWidth / 20) * i) + barPadding)
+      .attr('height', svgHeight)
+      .attr('y', 0);
 
     barGroup.append('rect')
         .attr('fill', '#1ED760')
@@ -134,11 +139,41 @@ class NewReleases extends React.Component {
         .attr('y', d => yScale(d.popularity));
 
     barGroup.append('text')
-      .attr('fill', '#FFFFFF')
+      .attr('fill', 'rgba(255, 255, 255, 0.8)')
+      .attr('font-size', 12)
       .text(d => d.name)
+      .attr('class', (d, i) => `bar-group-text-${i}`)
       .attr('x', 0)
-      .attr('y', (d, i) => (((svgWidth / 20) * i) * -1) - barPadding)
+      .attr('y', (d, i) => (((svgWidth / 20) * i) * -1) - barPadding - 10)
       .attr('transform', 'rotate(90) translate(0, -20)');
+
+    barGroup.append('text')
+      .attr('fill', 'rgba(255, 255, 255, 0.8)')
+      .attr('font-size', 12)
+      .text(d => d.popularity)
+      .attr('x', (d, i) => (i + 1) * (svgWidth / 20) - (barPadding / 2))
+      .attr('y', svgHeight + 20);
+
+    const barGroupBack = barGroup.append('rect')
+      .attr('class', (d, i) => `bar-group-back bar-group-background-${i}`)
+      .attr('opacity', 0)
+      .attr('fill', 'transparent')
+      .attr('width', (svgWidth / 20) + 5)
+      .attr('x', (d, i) => ((svgWidth / 20) * i) + barPadding - 10)
+      .attr('height', svgHeight + 10)
+      .attr('y', -10);
+
+    barGroupBack.on('mouseenter', (d, i) => {
+      svg.select(`.bar-group-text-${i}`).attr('fill', 'rgba(255, 255, 255, 1)');
+      svg.select(`.bar-group-contain-${i}`).attr('stroke', 'rgba(255, 255, 255, 0.7)');
+      svg.select(`.bar-group-background-${i}`).attr('fill', '#999').attr('opacity', 0.3);
+    });
+
+    barGroupBack.on('mouseleave', (d, i) => {
+      svg.select(`.bar-group-text-${i}`).attr('fill', 'rgba(255, 255, 255, 0.8)');
+      svg.select(`.bar-group-contain-${i}`).attr('stroke', 'rgba(255, 255, 255, 0.3)');
+      svg.select(`.bar-group-background-${i}`).attr('fill', 'transparent').attr('opacity', 0);
+    });
 
     const yAxis = d3.axisLeft(yScale).ticks(d3.max(popularities) / 5);
 
