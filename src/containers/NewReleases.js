@@ -102,7 +102,7 @@ class NewReleases extends React.Component {
     const svgWidth = 1000;
     const svgHeight = 500;
     const barPadding = 40;
-    const customElasticEasing = d3.easeElastic.period(0.3);
+    const customElasticEasing = d3.easeElastic.period(0.7);
     const popularities = dataset.map(item => item.popularity);
 
     const yScale = d3.scaleLinear()
@@ -148,7 +148,9 @@ class NewReleases extends React.Component {
 
     d3.select('.y.axis').select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.8)');
     const axisTicks = d3.select('.y.axis').selectAll('.tick');
-    axisTicks.select('line').attr('stroke', 'rgba(255, 255, 255, 0.5)');
+    axisTicks.select('line')
+      .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+      .attr('x2', svgWidth + 50);
     axisTicks.select('text').attr('fill', '#FFFFFF').style('font-size', 16);
 
     svg.append('text')
@@ -158,6 +160,14 @@ class NewReleases extends React.Component {
       .attr('fill', 'rgba(255,255,255, 0.8)')
       .style('font-size', 20)
       .style('font-weight', 700);
+
+    svg.append('line')
+      .attr('stroke', '#FFFFFF')
+      .attr('stroke-width', 0.5)
+      .attr('x1', 0.5)
+      .attr('x2', svgWidth + 50)
+      .attr('y1', svgHeight + 1)
+      .attr('y2', svgHeight + 1);
   }
 
   renderFetchedList() {
