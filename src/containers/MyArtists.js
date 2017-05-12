@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 
 const styles = {
   container: {
@@ -31,20 +32,25 @@ class MyArtists extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      artist: 'Aimer',
+      artist: '',
       albums: [],
     };
   }
 
   componentDidMount() {
-    axios('https://api.spotify.com/v1/artists/0bAsR2unSRpn6BQPEnNlZm/albums')
-      .then(res => this.setState({ albums: res.data.items }));
+    const { artistId } = this.props.match.params;
+    axios(`https://api.spotify.com/v1/artists/${artistId}`)
+      .then(res => this.setState({ artist: res.data.name }));
+    axios(`https://api.spotify.com/v1/artists/${artistId}/albums`)
+      .then(res => this.setState({ albums: _.uniqBy(res.data.items, 'name') }));
   }
 
   render() {
     return (
       <div style={styles.container}>
-        <h2 style={styles.sectionHeading}>{`${this.state.artist}'s Albums`}</h2>
+        { this.state.artist !== '' && (
+          <h2 style={styles.sectionHeading}>{`${this.state.artist}'s Albums`}</h2>
+        )}
         <div style={styles.list}>
           {this.state.albums.map(album => (
             <div key={album.id} style={styles.card}>

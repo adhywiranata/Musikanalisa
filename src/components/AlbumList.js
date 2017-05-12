@@ -76,7 +76,7 @@ const AlbumList = ({ items }) => (
           <Text>Artists</Text>
           <Ul style={{ padding: 0 }}>
             { item.artists.map(artist => (
-              <Link key={artist.id} to="/" style={{ textDecoration: 'none' }}>
+              <Link key={artist.id} to={`/artist/${artist.id}`} style={{ textDecoration: 'none' }}>
                 <Li>
                   { artist.name }
                 </Li>
