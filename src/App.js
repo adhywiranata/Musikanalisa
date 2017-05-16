@@ -2,14 +2,15 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import './App.css';
-
-import Login from './containers/Login';
-import AuthSuccess from './containers/AuthSuccess';
-import Home from './containers/Home';
-import MyArtists from './containers/MyArtists';
-import Profile from './containers/Profile';
-import NewReleases from './containers/NewReleases';
-import TopArtists from './containers/TopArtists';
+import {
+  Login,
+  AuthSuccess,
+  Home,
+  MyArtists,
+  Profile,
+  NewReleases,
+  TopArtists,
+} from './containers';
 import { Header } from './components';
 
 const App = () => (
