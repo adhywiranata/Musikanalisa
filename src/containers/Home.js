@@ -3,7 +3,12 @@ import axios from 'axios';
 
 const styles = {
   container: {
-    padding: '0 100px',
+    marginTop: -50,
+    width: '100%',
+    height: '100vh',
+    background: '#67B26F',
+    background: '-webkit-linear-gradient(to right, #4ca2cd, #67B26F)',
+    background: 'linear-gradient(to right, #4ca2cd, #67B26F)',
   },
   sectionHeading: {
     color: '#FFFFFF',
