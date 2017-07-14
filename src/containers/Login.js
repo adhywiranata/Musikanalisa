@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { SPOTIFY_CLIENT_ID, SPOTIFY_USER_SCOPES, SPOTIFY_CALLBACK_URL } from '../config/api';
+
 const styles = {
   list: {
     width: '100%',
@@ -33,7 +35,7 @@ class Login extends React.Component {
     return (
       <div style={styles.container}>
         <h2 style={{ color: '#FFFFFF', fontSize: '2em' }}>Login to Musikanalisa</h2>
-        <a href="http://localhost:1234/login/">
+        <a href={`https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${SPOTIFY_CALLBACK_URL}&scope=${encodeURIComponent(SPOTIFY_USER_SCOPES)}&response_type=token&state=123`}>
           <button style={styles.btn}>
             Login to Spotify
           </button>

@@ -24,10 +24,13 @@ const styles = {
 };
 
 class AuthSuccess extends React.Component {
-  componentDidMount() {
-    const { access_token, refresh_token } = this.props.match.params;
-    localStorage.setItem('accessToken', access_token);
-    localStorage.setItem('refreshToken', refresh_token);
+  constructor() {
+    super();
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const accessToken = hash.split('&')[0].replace('access_token=','');
+      localStorage.setItem('accessToken', accessToken);
+    }
   }
 
   render() {

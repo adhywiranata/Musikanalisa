@@ -24,7 +24,8 @@ const App = () => (
         <Route path="/me" component={Profile} />
         <Route path="/artists" component={TopArtists} />
         <Route path="/artist/:artistId" component={MyArtists} />
-        <Route path="/callback/:access_token/:refresh_token" component={AuthSuccess} />
+        {/* <Route path="/callback/:access_token/:refresh_token" component={AuthSuccess} /> */}
+        <Route path="/callback" component={AuthSuccess} />
       </Switch>
     </div>
   </BrowserRouter>
