@@ -22,7 +22,7 @@ const styles = {
     color: '#FFFFFF',
     outline: 'none',
   },
-}
+};
 
 class Login extends React.Component {
   constructor(props) {
